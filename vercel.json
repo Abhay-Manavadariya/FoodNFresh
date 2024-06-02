@@ -8,12 +8,8 @@
   ],
   "routes": [
     {
-      "src": "/admin(.*)",
-      "dest": "/admin/route/router.js"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/user/route/router.js"
+      "dest": "/"
     }
   ]
 }
