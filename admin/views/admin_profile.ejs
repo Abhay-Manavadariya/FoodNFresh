@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('common/admin_head'); %>
+
+  <body>
+    <%- include('common/sidebar'); %>
+    <!-- ./  menu -->
+
+    <!-- layout-wrapper -->
+    <div class="layout-wrapper">
+      <!-- header -->
+      <div class="header">
+        <div class="menu-toggle-btn">
+          <!-- Menu close button for mobile devices -->
+          <a href="#">
+            <i class="bi bi-list"></i>
+          </a>
+        </div>
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+          <img
+            width="100"
+            src="https://vetra.laborasyon.com/assets/images/logo.svg"
+            alt="logo"
+          />
+        </a>
+        <!-- ./ Logo -->
+        <div class="page-title">Profile Settings</div>
+      </div>
+      <!-- ./ header -->
+
+      <!-- content -->
+      <div class="content">
+        <div class="row flex-column-reverse flex-md-row">
+          <div class="col-md-8">
+            <div class="tab-content" id="myTabContent">
+              <div
+                class="tab-pane fade show active"
+                id="profile"
+                role="tabpanel"
+                aria-labelledby="profile-tab"
+              >
+                <div class="mb-4">
+                  <div
+                    class="d-flex flex-column flex-md-row text-center text-md-start mb-3"
+                  >
+                    <form
+                      action="/admin/admin_profile_upload"
+                      method="POST"
+                      enctype="multipart/form-data"
+                    >
+                      <figure class="me-4 flex-shrink-0">
+                        <img
+                          width="100"
+                          class="rounded-pill"
+                          src="admin_src/assets/images/admin_profile_images/<%= admin.photo%>"
+                          alt="profile-photo"
+                        />
+                      </figure>
+                      <div class="flex-fill">
+                        <h5 class="mb-3"><%= admin.name%></h5>
+                        <label for="file-upload" class="btn btn-primary me-2">
+                          Choose Image
+                        </label>
+                        <input
+                          type="file"
+                          id="file-upload"
+                          style="display: none"
+                          name="originalname"
+                        />
+
+                        <button class="btn btn-primary me-2">Update</button
+                        ><br /><br />
+
+                        [*<span style="color: #52b14f">
+                          After Uploading The Photo Please Press Update Button </span
+                        >*]
+                      </div>
+                    </form>
+                  </div>
+
+                  <form action="/admin/admin_profile" method="post">
+                    <div class="card mb-4">
+                      <div class="card-body">
+                        <h6 class="card-title mb-4">Basic Information</h6>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="mb-3">
+                              <label class="form-label">Name</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                value="<%= admin.name %>"
+                                name="name"
+                              />
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Contact</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                name="contact"
+                                value="<%= admin.contact %>"
+                                name="contact"
+                              />
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Email</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                value="<%= admin.email %>"
+                                name="email"
+                              />
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Date of Birth</label>
+                              <div class="d-flex gap-3">
+                                <input
+                                  type="date"
+                                  class="form-control"
+                                  name="dob"
+                                  value="<%= admin.dob %>"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="mb-3">
+                              <label class="form-label">City</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                name="city"
+                                required
+                                value="<%= admin.city %>"
+                              />
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">State</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                name="state"
+                                required
+                                value="<%= admin.state %>"
+                              />
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Country</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                value="<%= admin.country %>"
+                                readonly
+                              />
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Address</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                value="<%= admin.address %>"
+                                name="address"
+                              />
+                            </div>
+                          </div>
+                          <button class="btn btn-success btn-icon">
+                            <i class="bi bi-check-circle"></i> Save
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div
+                class="tab-pane fade"
+                id="password"
+                role="tabpanel"
+                aria-labelledby="password-tab"
+              >
+                <form method="post" action="/admin/admin_changepw">
+                  <div class="card">
+                    <div class="card-body">
+                      <h6 class="card-title mb-4">Change Password</h6>
+                      <% if(locals.changepw1 != '') { %>
+                      <div
+                        class="alert alert-warning alert-dismissible fade show"
+                        role="alert"
+                      >
+                        <%= changepw1 %>
+                      </div>
+
+                      <% } %>
+                      <div class="mb-3">
+                        <label class="form-label">Old Password</label>
+                        <input
+                          type="password"
+                          class="form-control"
+                          name="current_pw"
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">New Password</label>
+                        <input
+                          type="password"
+                          class="form-control"
+                          name="new_pw"
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">Confirm Password</label>
+                        <input
+                          type="password"
+                          class="form-control"
+                          name="confirm_pw"
+                          required
+                        />
+                      </div>
+                      <button class="btn btn-success btn-icon">
+                        <i class="bi bi-check-circle"></i> Save
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card sticky-top mb-4 mb-md-0">
+              <div class="card-body">
+                <ul
+                  class="nav nav-pills flex-column gap-2"
+                  id="myTab"
+                  role="tablist"
+                >
+                  <li class="nav-item" role="presentation">
+                    <a
+                      class="nav-link active"
+                      id="profile-tab"
+                      data-bs-toggle="tab"
+                      href="#profile"
+                      role="tab"
+                      aria-controls="profile"
+                      aria-selected="true"
+                    >
+                      <i class="bi bi-person me-2"></i> Profile
+                    </a>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <a
+                      class="nav-link"
+                      id="password-tab"
+                      data-bs-toggle="tab"
+                      href="#password"
+                      role="tab"
+                      aria-controls="password"
+                      aria-selected="false"
+                    >
+                      <i class="bi bi-lock me-2"></i> Password
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ./ content -->
+    </div>
+
+    <script src="admin_src/libs/bundle.js"></script>
+
+    <script src="admin_src/dist/js/app.min.js"></script>
+  </body>
+</html>

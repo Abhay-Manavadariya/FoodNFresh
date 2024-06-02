@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<%- include('common/head'); %>
+<body>
+
+    <!-- create account-in Section Start  -->
+  
+    <section class="create-account section section--xl">
+      <div class="container">
+        <div class="form-wrapper">
+          <h6 class="font-title--sm">create account</h6>
+
+          <% if(typeof alert != 'undefined') { %>
+            <% alert.forEach(function(error) { %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <%= error.msg %>
+                  </div>
+            <% }) %>
+        <% } %>
+
+
+        <% if(locals.error != '') { %>
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <%= error %>
+          </div>
+       
+        <% } %>
+
+
+      <form action="/register" method="POST">
+
+        <div class="form-input">
+
+          <input type="text" placeholder="Username" name="name">
+        
+        </div>
+            
+        <div class="form-input">
+
+              <input type="email" placeholder="Email" name="email">
+            
+            </div>
+            <div class="form-input">
+              <input type="password" placeholder="Password" id="password" name="password"/>
+              <button
+                type="button"
+                class="icon icon-eye"
+                onclick="showPassword('password',this)"
+              >
+                
+            </div>
+            <div class="form-input">
+              <input type="password" placeholder="Confirm Password" id="confirmPassword" name="confirmpassword"/>
+              <button
+                type="button"
+                class="icon icon-eye"
+                onclick="showPassword('confirmPassword',this)"
+              >
+              
+            </div>
+            
+            <div class="form-button">
+              <button class="button button--md w-100">Create Account</button>
+            </div>
+            <div class="form-register">
+              Already have account ? <a href="/login">Login</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <!-- create account-in Section end  -->
+
+    <script src="src/lib/js/jquery.min.js"></script>
+    <script src="src/lib/js/swiper-bundle.min.js"></script>
+    <script src="src/lib/js/bvselect.js"></script>
+    <script src="src/lib/js/bootstrap.bundle.min.js"></script>
+    <script src="src/js/main.js"></script>
+  </body>
+
+</html>

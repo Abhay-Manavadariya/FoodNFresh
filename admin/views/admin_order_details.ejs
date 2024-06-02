@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+
+<%- include('common/admin_head'); %>
+
+<body>
+
+<!-- menu -->
+<%- include('common/sidebar'); %>
+<!-- ./  menu -->
+
+<!-- layout-wrapper -->
+<div class="layout-wrapper">
+
+    <!-- header -->
+    <div class="header">
+    <div class="menu-toggle-btn"> <!-- Menu close button for mobile devices -->
+        <a href="#">
+            <i class="bi bi-list"></i>
+        </a>
+    </div>
+    <!-- Logo -->
+    <a href="index.html" class="logo">
+        <img width="100" src="https://vetra.laborasyon.com/assets/images/logo.svg" alt="logo">
+    </a>
+    <!-- ./ Logo -->
+    <div class="page-title">Order Detail</div>
+   
+</div>
+    <!-- ./ header -->
+
+    <!-- content -->
+    <div class="content ">
+        
+    <div class="mb-4">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">
+                        <i class="bi bi-globe2 small me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Order Detail</li>
+            </ol>
+        </nav>
+    </div>
+
+    <% data.forEach(function (data) { %>
+
+    <div class="row">
+        <div class="col-lg-8 col-md-12">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="mb-5 d-flex align-items-center justify-content-between">
+                        <span>Order No : <%= data._id %></a></span>
+                        <span class="badge bg-success"><%= data.status%></span>
+                    </div>
+                    <div class="row mb-5 g-4">
+                        <div class="col-md-3 col-sm-6">
+                            <p class="fw-bold">Order Created at</p>
+                            <%= moment(data.ordertime).format('Do MMMM, YYYY')%> at <%= moment(data.ordertime).format('HH:MM:SS') %>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <p class="fw-bold">Name</p>
+                            <%= data.name %>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <p class="fw-bold">Email</p>
+                            <%= data.email %>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <p class="fw-bold">Contact No</p>
+                            <%= data.phonenumber %>
+                        </div>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-6 col-sm-12">
+                            <div class="card">
+                                <div class="card-body d-flex flex-column gap-3">
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="mb-0">Delivery Address</h5>
+                                        
+                                    </div>
+                                    <div><b>Name:</b> Home</div>
+                                    <div><b>Address:</b> <%= data.address %></div>
+                                    <div><b>City:</b> <%= data.city %></div>
+                                    <div><b>State:</b> <%= data.state %></div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="card widget">
+                <h5 class="card-header">Order Items</h5>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-custom mb-0">
+                            <thead>
+                            <tr>
+                                <th>Photo</th>
+                                <th>Name</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <% for(var key in data.items) { %>
+
+                            <tr>
+                                <td>
+                                    <a href="">
+                                        <img src="admin_src/assets/images/product/<%= data.items[key].items.product_photo %>" class="rounded" width="60" alt="...">
+                                    </a>
+                                </td>
+                                <td><%= data.items[key].items.name %></td>
+                                <td><%= data.items[key].qty %></td>
+                                <td>RS <%= data.items[key].items.MRP %></td>
+                                <td>RS <%= data.items[key].items.MRP * data.items[key].qty %></td>
+                            </tr>
+                            
+                            <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-12 mt-4 mt-lg-0">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h6 class="card-title mb-4">Price</h6>
+                    <div class="row justify-content-center mb-3">
+                        <div class="col-4 text-end">Sub Total :</div>
+                        <div class="col-4">RS <%= data.totalprice %></div>
+                    </div>
+                    <div class="row justify-content-center mb-3">
+                        <div class="col-4 text-end">Shipping :</div>
+                        <div class="col-4">Free</div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-4 text-end">
+                            <strong>Total :</strong>
+                        </div>
+                        <div class="col-4">
+                            <strong>RS <%= data.totalprice %></strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+
+    <% })%>
+
+    </div>
+    <!-- ./ content -->
+
+
+</div>
+<!-- ./ layout-wrapper -->
+
+
+<script src="admin_src/libs/bundle.js"></script>
+
+   
+    <script src="admin_src/dist/js/examples/orders.js"></script>
+
+
+<script src="admin_src/dist/js/app.min.js"></script>
+</body>
+
+</html>

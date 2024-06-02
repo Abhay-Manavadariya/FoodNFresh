@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('common/admin_head'); %>
+
+  <body class="auth">
+    <div class="form-wrapper" style="width: 650px">
+      <div class="container">
+        <div class="card">
+          <div class="row g-0">
+            <div class="col">
+              <div class="row">
+                <div class="col-md-10 offset-md-1">
+                  <div class="my-5 text-center text-lg-start">
+                    <h1 class="display-8">Sign In</h1>
+                  </div>
+                  <% if(typeof alert != 'undefined') { %> <%
+                  alert.forEach(function(error) { %>
+                  <div
+                    class="alert alert-danger alert-dismissible fade show"
+                    role="alert"
+                  >
+                    <%= error.msg %>
+                  </div>
+                  <% }) %> <% } %> <% if(locals.error != '') { %>
+                  <div
+                    class="alert alert-danger alert-dismissible fade show"
+                    role="alert"
+                  >
+                    <%= error %>
+                  </div>
+
+                  <% } %>
+                  <form class="mb-5" method="post" action="/admin/admin_login">
+                    <div class="mb-3">
+                      <input
+                        type="email"
+                        class="form-control"
+                        name="email"
+                        placeholder="Enter email"
+                        autofocus
+                        required
+                      />
+                    </div>
+                    <div class="mb-3">
+                      <input
+                        type="password"
+                        class="form-control"
+                        name="password"
+                        placeholder="Enter password"
+                        required
+                      />
+                    </div>
+                    <div class="text-center text-lg-start">
+                      <button class="btn btn-primary">Sign In</button>
+                    </div>
+                  </form>
+
+                  Don't have an account?
+                  <a href="/admin/admin_register">Sign up</a>.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Javascript file -->
+    <script src="admin_src/dist/js/app.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+
+<%- include('common/admin_head'); %>
+
+<body>
+
+<!-- menu -->
+<%- include('common/sidebar'); %>
+<!-- ./  menu -->
+
+<!-- layout-wrapper -->
+<div class="layout-wrapper">
+
+    <!-- header -->
+    <div class="header">
+    <div class="menu-toggle-btn"> <!-- Menu close button for mobile devices -->
+        <a href="#">
+            <i class="bi bi-list"></i>
+        </a>
+    </div>
+    <!-- Logo -->
+    <a href="index.html" class="logo">
+        <img width="100" src="https://vetra.laborasyon.com/assets/images/logo.svg" alt="logo">
+    </a>
+    <!-- ./ Logo -->
+    <div class="page-title">Customers</div>
+   
+    
+</div>
+    <!-- ./ header -->
+
+    <!-- content -->
+    <div class="content ">
+        
+    <div class="mb-4">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">
+                        <i class="bi bi-globe2 small me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Customers</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-custom table-lg mb-0" id="customers">
+            <thead>
+            <tr>
+                <th style="color: #ff470d;">ID</th>
+                <th style="color: #ff470d;">Fullname</th>
+                <th style="color: #ff470d;">Email</th>
+                <th style="color: #ff470d;">Address</th>
+                <th style="color: #ff470d;">Contact</th>
+                <th style="color: #ff470d;">City</th>
+                <th style="color: #ff470d;">State</th>
+                <th style="color: #ff470d;">Country</th>
+                <th style="color: #ff470d;">Date</th>
+            </tr>
+            </thead>
+            <tbody>
+
+                <% let i=1 %>
+                <% posts.forEach(function (posts) { %>
+                  
+                    <tr>
+                        <td><%= i %></td>
+                        <td><%= posts.name %></td>
+                        <td><%= posts.email %></td>
+                        <td><%= posts.address %></td>
+                        <td><%= posts.contact %></td>
+                        <td><%= posts.city %></td>
+                        <td><%= posts.state %></td>
+                        <td><%= posts.country %></td>
+                        <td><%= moment(posts.created).format('Do MMMM, YYYY'); %></td>
+                        
+                    </tr>   
+
+                <% i++;}) %>
+        
+            </tbody>
+        </table>
+    </div>
+
+
+    </div>
+  
+
+</div>
+
+    <script src="admin_src/libs/bundle.js"></script>
+
+    
+    <script src="admin_src/libs/charts/apex/apexcharts.min.js"></script>
+
+   
+    <script src="admin_src/dist/js/examples/customers.js"></script>
+
+<script src="admin_src/dist/js/app.min.js"></script>
+
+</body>
+</html>

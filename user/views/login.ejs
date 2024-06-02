@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<%- include('common/head'); %>
+
+
+  <body>
+    <!-- Sign-in Section Start  -->
+    <section class="sign-in section section--xl">
+      <div class="container">
+        <div class="form-wrapper">
+          <h6 class="font-title--sm">Sign in</h6>
+
+          <% if(typeof alert != 'undefined') { %>
+            <% alert.forEach(function(error) { %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <%= error.msg %>
+                  </div>
+            <% }) %>
+        <% } %>
+
+        <% if(err != '') { %>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <%= err %>
+          </div>
+
+        <% } %>
+          
+          <form action="/login" method="POST">
+            
+            <div class="form-input">
+              <input type="email" placeholder="Email" name="email" required>
+            
+            </div>
+
+            <div class="form-input">
+              <input type="password" placeholder="Password" id="password" name="password" required>
+              <button
+                type="button"
+                class="icon icon-eye"
+                onclick="showPassword('password',this)"
+              >
+            </div>
+
+            <div class="form-wrapper__content">
+              <a href="/forgot_password" style="margin-left:1%"><b> Forget Password </b> </a>
+            </div>
+
+            <div class="form-button">
+              <button class="button button--md w-100">Login</button>
+            </div>
+            <div class="form-register">
+              Don't have account ? <a href="/register">Register</a>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </section>
+    <!-- Sign-in Section end  -->
+
+
+    <!--Footer Section end  -->
+    <script src="src/lib/js/jquery.min.js"></script>
+    <script src="src/lib/js/swiper-bundle.min.js"></script>
+    <script src="src/lib/js/bvselect.js"></script>
+    <script src="src/lib/js/bootstrap.bundle.min.js"></script>
+    <script src="src/js/main.js"></script>
+  </body>
+
+</html>

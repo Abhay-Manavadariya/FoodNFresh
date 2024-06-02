@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+
+<%- include('common/admin_head');%>
+
+<body>
+
+
+<!-- menu -->
+<%- include('common/sidebar'); %>
+<!-- ./  menu -->
+
+<!-- layout-wrapper -->
+<div class="layout-wrapper">
+
+    <!-- header -->
+    <div class="header">
+    <div class="menu-toggle-btn"> <!-- Menu close button for mobile devices -->
+        <a href="#">
+            <i class="bi bi-list"></i>
+        </a>
+    </div>
+    <!-- Logo -->
+    <a href="index.html" class="logo">
+        <img width="100" src="https://vetra.laborasyon.com/assets/images/logo.svg" alt="logo">
+    </a>
+    <!-- ./ Logo -->
+    <div class="page-title">Rejected Orders</div>
+   
+</div>
+    <!-- ./ header -->
+
+    <!-- content -->
+    <div class="content ">
+        
+    <div class="mb-4">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">
+                        <i class="bi bi-globe2 small me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Rejected Order</li>
+            </ol>
+        </nav>
+    </div>
+
+    
+    <div class="table-responsive">
+        <table class="table table-custom table-lg mb-0" id="orders">
+            <thead>
+            <tr>
+               
+                <th>No</th>
+                <th>Name</th>
+                <th>Time</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Order Status</th>
+                
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <% let i=1 %>
+                <% data.forEach(function (data) { %>
+
+                <tr>
+               
+                <td>
+                    <a href=""><%= i %></a>
+                </td>
+                <td><%= data.name %></td>
+                <td><%= moment(data.ordertime).format('HH:MM:SS') %></td>
+                <td><%= moment(data.ordertime).format('Do MMMM, YYYY') %></td>
+                <td>RS <%= data.totalprice %></td>
+                
+                
+                <% if(data.status == 'Order_Rejected') { %>
+                    <td>
+                    
+                        <span class="badge bg-danger inv-badge
+                        p-2" style="font-size:15px;">Rejected</span>
+                    </td>
+    
+    
+                <% } %>
+
+                <td>
+                    <!-- <span class="badge bg-primary"></span> -->
+                    <a href="/admin/admin_order_details?order_id=<%= data._id %>">
+                        <span class="badge bg-warning inv-badge
+                        p-2" style="font-size:15px;">Show Details</span>
+                    </a>
+                </td>
+
+                </tr> 
+
+                <% i++;}) %>
+                
+               
+            </tr>
+            
+          
+            </tbody>
+        </table>
+    </div>
+
+
+    </div>
+    <!-- ./ content -->
+
+</div>
+
+<script src="admin_src/libs/bundle.js"></script>
+
+    
+    <script src="admin_src/dist/js/examples/orders.js"></script>
+
+<script src="admin_src/dist/js/app.min.js"></script>
+</body>
+
+</html>

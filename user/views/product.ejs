@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('common/head'); %>
+
+  <body>
+    <!-- Header Section start -->
+    <%- include('common/header'); %>
+    <!-- Header  Section start -->
+
+    <!-- Breadcrumb Section Start  -->
+    <div
+      class="breedcrumb breedcrumb--two mb-5"
+      style="background-color: #343a40"
+    >
+      <div class="container">
+        <ul class="breedcrumb__content">
+          <li>
+            <a href="/">
+              <svg
+                width="18"
+                height="19"
+                viewBox="0 0 18 19"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M1 8L9 1L17 8V18H12V14C12 13.2044 11.6839 12.4413 11.1213 11.8787C10.5587 11.3161 9.79565 11 9 11C8.20435 11 7.44129 11.3161 6.87868 11.8787C6.31607 12.4413 6 13.2044 6 14V18H1V8Z"
+                  stroke="#808080"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <span> > </span>
+            </a>
+          </li>
+          <li class="">
+            <a href="/category">
+              Categories
+              <span> ></span>
+            </a>
+          </li>
+          <li class="active">
+            <a href=""><%= category_name%></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- Breadcrumb Section End  -->
+
+    <!-- Shop list Section Start  -->
+    <h3 style="text-align: center; color: #00b207" class="mb-5">All Product</h3>
+
+    <section class="shop shop--two">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <!-- Desktop Version  -->
+            <div class="row shop__product-items">
+              <% data.forEach(function (data) { %>
+
+              <div class="col-lg-3 col-md-6">
+                <div class="cards-md cards-md--four w-100">
+                  <div class="cards-md__img-wrapper">
+                    <a href="#">
+                      <img
+                        src="../../admin/admin_src/assets/images/product/<%= data.product_photo %>"
+                        alt="products"
+                      />
+                    </a>
+
+                    <div class="cards-md__favs-list"></div>
+                  </div>
+                  <div
+                    class="cards-md__info d-flex justify-content-between align-items-center"
+                  >
+                    <a href="product-details.html" class="cards-md__info-left">
+                      <h6 class="font-body--md-400"><%= data.name %></h6>
+                      <div class="cards-md__info-price">
+                        <span class="font-body--lg-500"
+                          >RS <%= data.MRP %> Per
+                          <span style="color: #00b207">KG</span></span
+                        >
+                      </div>
+                    </a>
+                    <div class="cards-md__info-right">
+                      <button
+                        class="addtocart"
+                        data-product="<%= JSON.stringify(data)%>"
+                      >
+                        <span class="action-btn">
+                          <svg
+                            width="20"
+                            height="21"
+                            viewBox="0 0 20 21"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M6.66667 8.83333H4.16667L2.5 18H17.5L15.8333 8.83333H13.3333M6.66667 8.83333V6.33333C6.66667 4.49239 8.15905 3 10 3V3C11.8409 3 13.3333 4.49238 13.3333 6.33333V8.83333M6.66667 8.83333H13.3333M6.66667 8.83333V11.3333M13.3333 8.83333V11.3333"
+                              stroke="currentColor"
+                              stroke-width="1.3"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            ></path>
+                          </svg>
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <% }) %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Shop list Section End   -->
+
+    <!--Footer Section Start  -->
+    <%- include('common/footer'); %>
+    <!--Footer Section end  -->
+
+    <!-- <script>
+            function update_cart(product)
+            {
+                console.log(product)
+            }
+            let addtocart = document.querySelectorAll('.addtocart');
+
+            addtocart.forEach((btn) => {
+                btn.addEventListener('click',(e) => {
+                            
+                    let product = JSON.parse(btn.dataset.product); //convert string to json object
+                    console.log(product)
+                    update_cart(product)
+                            
+                })
+            })
+        </script> -->
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.js"
+      integrity="sha512-mgZL3SZ/vIooDg2mU2amX6NysMlthFl/jDbscSRgF/k3zmICLe6muAs7YbITZ+61FeUoo1plofYAocoR5Sa1rQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"
+      integrity="sha512-lOrm9FgT1LKOJRUXF3tp6QaMorJftUjowOWiDcG5GFZ/q7ukof19V0HKx/GWzXCdt9zYju3/KhBNdCLzK8b90Q=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.css"
+      integrity="sha512-NXUhxhkDgZYOMjaIgd89zF2w51Mub53Ru3zCNp5LTlEzMbNNAjTjDbpURYGS5Mop2cU4b7re1nOIucsVlrx9fA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css"
+      integrity="sha512-0p3K0H3S6Q4bEWZ/WmC94Tgit2ular2/n0ESdfEX8l172YyQj8re1Wu9s/HT9T/T2osUw5Gx/6pAZNk3UKbESw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <script type="module" src="src/js/addtocart.js"></script>
+
+    <script src="src/lib/js/jquery.min.js"></script>
+    <script src="src/lib/js/swiper-bundle.min.js"></script>
+    <script src="src/lib/js/bvselect.js"></script>
+    <script src="src/lib/js/bootstrap.bundle.min.js"></script>
+    <script src="src/lib/js/jquery.syotimer.min.js"></script>
+    <script src="src/js/main.js"></script>
+  </body>
+
+  <!-- Mirrored from shopery.netlify.app/main/shop-02.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 04 Jan 2022 17:34:58 GMT -->
+</html>

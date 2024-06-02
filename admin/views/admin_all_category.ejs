@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('common/admin_head'); %>
+
+  <body>
+    <!-- menu -->
+    <%- include('common/sidebar'); %>
+    <!-- menu -->
+
+    <!-- layout-wrapper -->
+    <div class="layout-wrapper">
+      <!-- header -->
+      <div class="header">
+        <div class="menu-toggle-btn">
+          <!-- Menu close button for mobile devices -->
+          <a href="#">
+            <i class="bi bi-list"></i>
+          </a>
+        </div>
+        <!-- Logo -->
+        <a href="/admin/" class="logo">
+          <img
+            width="100"
+            src="https://vetra.laborasyon.com/assets/images/logo.svg"
+            alt="logo"
+          />
+        </a>
+        <!-- ./ Logo -->
+        <div class="page-title">All Category</div>
+      </div>
+      <!-- ./ header -->
+
+      <!-- content -->
+      <div class="content">
+        <div class="mb-4">
+          <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="#">
+                  <i class="bi bi-globe2 small me-2"></i> Dashboard
+                </a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                All Category
+              </li>
+            </ol>
+          </nav>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-custom table-lg mb-0" id="customers">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Image</th>
+                <!-- <th>Category Name</th> -->
+                <th>Date</th>
+                <th>Status</th>
+                <th class="text-right">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% let i=1 %> <% data.forEach(function (data) { %>
+
+              <tr>
+                <td><%= i %></td>
+                <td style="width: 50%">
+                  <img
+                    style="width: 14%"
+                    class="rounded service-img mr-1"
+                    src="admin_src/assets/images/Category/<%= data.category_photo%>"
+                    alt="Category Image"
+                  />
+                  <span style="margin-left: 2%"><%= data.name %></span>
+                </td>
+                <td><%= moment(data.created).format('Do MMMM, YYYY'); %></td>
+                <td><%= data.status %></td>
+                <td>
+                  <% if(data.status == 'active') { %>
+                  <a href="/admin/admin_all_category/<%= data._id %>/1">
+                    <span
+                      class="badge bg-primary inv-badge p-2"
+                      style="font-size: 15px; margin-left: 2%"
+                      >Inactive</span
+                    >
+                  </a>
+                  <% }else{ %>
+                  <a href="/admin/admin_all_category/<%= data._id %>/0">
+                    <span
+                      class="badge bg-success inv-badge p-2"
+                      style="font-size: 15px; margin-left: 2%"
+                      >active</span
+                    >
+                  </a>
+                  <% } %>
+                </td>
+              </tr>
+
+              <% i++;}) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="admin_src/libs/bundle.js"></script>
+
+    <script src="admin_src/libs/charts/apex/apexcharts.min.js"></script>
+    <script src="admin_src/dist/js/examples/customers.js"></script>
+
+    <script src="admin_src/dist/js/app.min.js"></script>
+  </body>
+</html>
