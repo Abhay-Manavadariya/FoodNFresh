@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
 const multer = require("multer");
-
 const { check } = require("express-validator");
 
 const { admin_homepage } = require("../controller/admin_homecontroller");
@@ -56,34 +54,15 @@ router.post(
 router.get("/admin_logout", admin_logout);
 
 //upload the photo
-const storage = multer.diskStorage({
-  destination: (req, file, callback) => {
-    callback(
-      null,
-      "./admin/public/admin_src/assets/images/admin_profile_images"
-    );
-  },
-  filename: (req, file, callback) => {
-    callback(null, file.originalname);
-  },
-});
-
-const upload = multer({
-  storage: storage,
-  fileFilter(req, file, cb) {
-    if (!file.originalname.match(/\.(png|jpg|jpeg)$/)) {
-      // upload only png and jpg format
-      return cb(new Error("Please upload a jpg | png | jpeg Image file "));
-    }
-    cb(undefined, true);
-  },
-});
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 router.post(
   "/admin_profile_upload",
   upload.single("originalname"),
   admin_profile_photo
 );
+
 router.post("/admin_profile", admin_profile);
 router.post("/admin_changepw", admin_changepw);
 

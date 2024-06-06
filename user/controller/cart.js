@@ -3,7 +3,7 @@ exports.shopping_cart_page = (req, res) => {
   res.render("shopping_cart", { cookie });
 };
 
-exports.updatecart = (req, res) => {
+exports.updateCart = (req, res) => {
   // let cart = {
   //     items : {
   //         productid : { product : productObject, qty : 0}
@@ -21,11 +21,9 @@ exports.updatecart = (req, res) => {
     };
   }
 
-  //console.log(req.body);
   let cart = req.session.cart;
 
   //check if item does exist or not in cart
-
   if (!cart.items[req.body._id]) {
     cart.items[req.body._id] = {
       items: req.body,
@@ -40,5 +38,4 @@ exports.updatecart = (req, res) => {
   }
 
   res.json({ totalqty: req.session.cart.totalqty });
-  console.log("cart : ", cart);
 };

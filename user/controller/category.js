@@ -1,13 +1,14 @@
 const category = require("../../admin/models/category");
 
-exports.category = (req, res) => {
-  const cookie = req.cookies.jwt;
+exports.category = async (req, res) => {
+  try {
+    const cookie = req.cookies.jwt;
 
-  category.find({ status: "active" }, function (err, data) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.render("category", { data, cookie });
-    }
-  });
+    const data = await category.find({ status: "active" }).exec();
+
+    res.render("category", { data, cookie });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };

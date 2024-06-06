@@ -63,73 +63,73 @@
                 </div>
 
                 <div class="dashboard__details-content">
-                  <% data.forEach(function (data) { %> <% if(data.status ==
-                  'Order_Delivered') { %>
-
+                  <% if(orderData.status == 'Order_Delivered') { %>
                   <div class="alert alert-success" role="alert">
                     <strong>Order Already Delivered. Thank You❤️!!!</strong>
                   </div>
-
-                  <% }else if(data.status == 'Order_Pending'){ %>
-
+                  <% } else if(orderData.status == 'Order_Pending') { %>
                   <div class="alert alert-primary" role="alert">
                     <strong
                       >Order Will Be Accepted Within 30 Minutes. Thank You For
-                      Order❤️!!!</strong
+                      Your Order❤️!!!</strong
                     >
                   </div>
-
-                  <% }else if(data.status == 'Order_Rejected'){ %>
-
+                  <% } else if(orderData.status == 'Order_Rejected') { %>
                   <div class="alert alert-danger" role="alert">
                     <strong>We Can't Deliver Your Order. Sorry🙂!!</strong>
                   </div>
-
-                  <% }else if(data.status == 'Order_Shipping'){%>
-
-                  <div class="alert alert-danger" role="alert">
-                    <strong>Your order has shipped. Thank You❤️!!!</strong>
+                  <% } else if(orderData.status == 'Order_Shipping') { %>
+                  <div class="alert alert-info" role="alert">
+                    <strong>Your Order Has Shipped. Thank You❤️!!!</strong>
                   </div>
-
-                  <% }else if(data.status == 'Order_Packing'){ %>
-
+                  <% } else if(orderData.status == 'Order_Packing') { %>
                   <div class="alert alert-warning" role="alert">
-                    <strong>Your order is being Packed. Thank You❤️!!!</strong>
+                    <strong>Your Order Is Being Packed. Thank You❤️!!!</strong>
                   </div>
-
-                  <% } %> <% }) %>
+                  <% } %>
 
                   <div class="row">
                     <div class="col-xl-4">
                       <div class="dashboard__details-card">
-                        <div class="dashboard__details-card-item">
+                        <div
+                          class="dashboard__details-card-item"
+                          style="width: 100%"
+                        >
                           <h5 class="dashboard__details-card-title">
                             Shipping Address
                           </h5>
                           <!-- Shipping Address -->
                           <div class="dashboard__details-card-item__inner">
                             <h2 class="font-body--lg-400 name">
-                              <%= data[0].name %>
+                              <%= orderData.userId.name %>
                             </h2>
                             <p class="font-body--md-400">
-                              <%= data[0].address %>
+                              <%= orderData.addressDetails.address %>
+                            </p>
+                            <p class="font-body--md-400">
+                              <%= orderData.addressDetails.city %>, <%=
+                              orderData.addressDetails.state %> - <%=
+                              orderData.addressDetails.zipCode %>
                             </p>
                           </div>
                           <div class="dashboard__details-card-item__inner">
                             <div
                               class="dashboard__details-card-item__inner-contact"
                             >
-                              <h5 class="title">Email</h5>
-                              <p class="font-body--md-400">
-                                <%= data[0].email %>
+                              <h5 class="title font-body--md-600">Email</h5>
+                              <p
+                                class="font-body--md-400"
+                                style="text-transform: none"
+                              >
+                                <%= orderData.userId.email %>
                               </p>
                             </div>
                             <div
                               class="dashboard__details-card-item__inner-contact"
                             >
-                              <h5 class="title">Phone</h5>
+                              <h5 class="title font-body--md-600">Phone</h5>
                               <p class="font-body--md-400">
-                                <%= data[0].phonenumber %>
+                                <%= orderData.userId.contact %>
                               </p>
                             </div>
                           </div>
@@ -141,7 +141,7 @@
                         <div class="dashboard__totalpayment-card-header">
                           <div class="dashboard__totalpayment-card-header-item">
                             <h5 class="title">Order id:</h5>
-                            <p class="details order-id"><%= data[0]._id %></p>
+                            <p class="details order-id"><%= orderData._id %></p>
                           </div>
                           <div class="dashboard__totalpayment-card-header-item">
                             <h5 class="title">Payment Method:</h5>
@@ -153,7 +153,7 @@
                           <div class="dashboard__totalpayment-card-body-item">
                             <h5 class="font-body--md-400">Subtotal:</h5>
                             <p class="font-body--md-500">
-                              <%= data[0].totalprice%>
+                              <%= orderData.totalPrice%>
                             </p>
                           </div>
 
@@ -166,7 +166,7 @@
                           >
                             <h5 class="font-body--xl-400">Total:</h5>
                             <p class="font-body--xl-500">
-                              RS. <%= data[0].totalprice%>
+                              RS. <%= orderData.totalPrice%>
                             </p>
                           </div>
                         </div>
@@ -209,8 +209,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <% data.forEach(function (data) { %> <% for(var key in
-                        data.items) { %>
+                        <% for(var key in orderData.items) { %>
 
                         <tr>
                           <!-- Product item  -->
@@ -223,12 +222,12 @@
                             >
                               <div class="dashboard__product-item-img">
                                 <img
-                                  src="../../admin/admin_src/assets/images/product/<%= data.items[key].items.product_photo %>"
+                                  src="data:<%= orderData.items[key].items.product_photo.contentType %>;base64,<%= Buffer.from(orderData.items[key].items.product_photo.data).toString('base64') %>"
                                   alt="product"
                                 />
                               </div>
                               <h5 class="font-body--md-400">
-                                <%= data.items[key].items.name %>
+                                <%= orderData.items[key].items.name %>
                               </h5>
                             </a>
                           </td>
@@ -236,14 +235,14 @@
                           <td
                             class="dashboard__order-history-table-item order-date align-middle"
                           >
-                            RS <%= data.items[key].items.MRP %>
+                            RS <%= orderData.items[key].items.MRP %>
                           </td>
                           <!-- quantity -->
                           <td
                             class="dashboard__order-history-table-item order-total align-middle"
                           >
                             <p class="order-total-price">
-                              <%= data.items[key].qty %>
+                              <%= orderData.items[key].qty %>
                             </p>
                           </td>
                           <!-- Subtotal  -->
@@ -252,13 +251,13 @@
                             style="text-align: left"
                           >
                             <p class="font-body--md-500">
-                              RS <%= data.items[key].items.MRP *
-                              data.items[key].qty %>
+                              RS <%= orderData.items[key].items.MRP *
+                              orderData.items[key].qty %>
                             </p>
                           </td>
                         </tr>
 
-                        <% } %> <% }) %>
+                        <% } %>
                       </tbody>
                     </table>
                   </div>

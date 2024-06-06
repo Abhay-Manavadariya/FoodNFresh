@@ -1,6 +1,6 @@
 <div class="menu">
   <div class="menu-header">
-    <a href="" class="menu-header-logo">
+    <a href="/admin/" class="menu-header-logo">
       <h4>Admin Dashboard</h4>
     </a>
     <a href="" class="btn btn-sm menu-close-btn">
@@ -12,7 +12,7 @@
       <a href="#" class="d-flex align-items-center" data-bs-toggle="dropdown">
         <div class="avatar me-3">
           <img
-            src="admin_src/assets/images/admin_profile_images/<%= admin.photo%>"
+            src="data:<%= admin.image.contentType %>;base64,<%= admin.image.data.toString('base64') %>"
             class="rounded-circle"
             alt="image"
           />

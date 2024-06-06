@@ -25,8 +25,10 @@ const adminschema = new mongoose.Schema({
     default: Date.now,
   },
   updated: Date,
-  photo: {
-    type: String,
+  fileName: String,
+  image: {
+    data: Buffer,
+    contentType: String,
   },
   address: {
     type: String,

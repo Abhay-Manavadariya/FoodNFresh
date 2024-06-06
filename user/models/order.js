@@ -1,41 +1,22 @@
 const mongoose = require("mongoose");
 
-const orderschema = new mongoose.Schema({
-  name: {
-    type: String,
-    trim: true,
+const orderSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     required: true,
   },
-  address: {
-    type: String,
-    required: true,
-  },
-  city: {
-    type: String,
-  },
-  state: {
-    type: String,
-  },
-  country: {
-    type: String,
-    default: "India",
-  },
-  zipcode: {
-    type: Number,
-  },
-  email: {
-    type: String,
-    trim: true,
-    required: true,
-  },
-  phonenumber: {
-    type: Number,
+  addressDetails: {
+    address: String,
+    city: String,
+    zipCode: String,
+    state: String,
   },
   items: {
     type: Object,
     required: true,
   },
-  ordertime: {
+  orderTime: {
     type: Date,
     default: Date.now,
   },
@@ -47,12 +28,9 @@ const orderschema = new mongoose.Schema({
     type: String,
     default: "Order_Pending",
   },
-  totalprice: {
-    type: Number,
-  },
-  qty: {
+  totalPrice: {
     type: Number,
   },
 });
 
-module.exports = mongoose.model("order", orderschema);
+module.exports = mongoose.model("order", orderSchema);

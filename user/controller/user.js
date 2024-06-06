@@ -6,7 +6,7 @@ require("dotenv").config();
 let State = require("country-state-city").State;
 const state = State.getStatesOfCountry("IN");
 
-exports.userdashboard = (req, res) => {
+exports.userDashboard = (req, res) => {
   const token = req.cookies.jwt;
 
   //console.log(req.params);
@@ -68,7 +68,7 @@ exports.logout = (req, res) => {
   res.redirect("/");
 };
 
-exports.updateuserinfo = (req, res) => {
+exports.updateUserinfo = (req, res) => {
   updateRecord(req, res);
 };
 
@@ -95,6 +95,8 @@ function updateRecord(req, res) {
         city: req.body.city,
 
         state: req.body.state,
+
+        zipCode: req.body.zipCode,
 
         contact: req.body.contact,
 

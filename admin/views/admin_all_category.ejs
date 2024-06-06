@@ -69,7 +69,7 @@
                   <img
                     style="width: 14%"
                     class="rounded service-img mr-1"
-                    src="admin_src/assets/images/Category/<%= data.category_photo%>"
+                    src="data:<%= data.category_photo.contentType %>;base64,<%= data.category_photo.data.toString('base64') %>"
                     alt="Category Image"
                   />
                   <span style="margin-left: 2%"><%= data.name %></span>

@@ -53,7 +53,7 @@
                         <img
                           width="100"
                           class="rounded-pill"
-                          src="admin_src/assets/images/admin_profile_images/<%= admin.photo%>"
+                          src="data:<%= admin.image.contentType %>;base64,<%= admin.image.data.toString('base64') %>"
                           alt="profile-photo"
                         />
                       </figure>

@@ -34,6 +34,7 @@
     "noty": "^3.2.0-beta-deprecated",
     "req-flash": "^0.0.3",
     "sharp": "^0.30.1",
+    "svelte-sonner": "^0.3.24",
     "validator": "^13.7.0"
   },
   "devDependencies": {

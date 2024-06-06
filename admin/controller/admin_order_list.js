@@ -3,268 +3,220 @@ const Order = require("../../user/models/order");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-exports.admin_pending_order_list_page = (req, res) => {
-  const cookie = req.cookies.admin_cookie;
-  if (cookie) {
-    const decoded = jwt.verify(cookie, process.env.JWT_SECRET);
-    const adminId = decoded._id;
-
-    Order.find({ status: "Order_Pending" }, function (err, data) {
-      if (err) {
-        console.log(err);
-      } else {
-        Admin.findById(adminId).exec((err, admin) => {
-          if (err || !admin) {
-            return res.status(400).json({
-              error: "admin not found",
-            });
-          }
-
-          res.render("admin_pending_order_list", { admin, data });
-        });
-      }
-    });
-  } else {
-    res.redirect("/admin/admin_login");
-  }
-};
-
-exports.admin_processing_order_list_page = (req, res) => {
-  const cookie = req.cookies.admin_cookie;
-  if (cookie) {
-    const decoded = jwt.verify(cookie, process.env.JWT_SECRET);
-    const adminId = decoded._id;
-
-    const order_id = req.query.order_id;
-
-    if (order_id) {
-      Order.findOneAndUpdate(
-        { _id: order_id },
-        {
-          $set: {
-            status: "Order_Packing",
-          },
-        },
-        (err, doc) => {
-          if (!err) {
-            //  console.log("done!!!!");
-          } else {
-            console.log("Error during record update : " + err);
-          }
-        }
-      );
+exports.admin_pending_order_list_page = async (req, res) => {
+  try {
+    const cookie = req.cookies.admin_cookie;
+    if (!cookie) {
+      return res.redirect("/admin/admin_login");
     }
 
-    Order.find({ status: "Order_Packing" }, function (err, data) {
-      if (err) {
-        console.log(err);
-      } else {
-        //console.log(data);
-
-        Admin.findById(adminId).exec((err, admin) => {
-          if (err || !admin) {
-            return res.status(400).json({
-              error: "admin not found",
-            });
-          }
-
-          //console.log(data);
-
-          res.render("admin_processing_order_list", { admin, data });
-        });
-      }
-    });
-  } else {
-    res.redirect("/admin/admin_login");
-  }
-};
-
-exports.admin_shipped_order_list_page = (req, res) => {
-  const cookie = req.cookies.admin_cookie;
-  if (cookie) {
     const decoded = jwt.verify(cookie, process.env.JWT_SECRET);
     const adminId = decoded._id;
 
-    const order_id = req.query.order_id;
-
-    if (order_id) {
-      Order.findOneAndUpdate(
-        { _id: order_id },
-        {
-          $set: {
-            status: "Order_Shipping",
-          },
-        },
-        (err, doc) => {
-          if (!err) {
-            //  console.log("done!!!!");
-          } else {
-            console.log("Error during record update : " + err);
-          }
-        }
-      );
+    const admin = await Admin.findById(adminId).exec();
+    if (!admin) {
+      return res.status(400).json({ error: "admin not found" });
     }
 
-    Order.find({ status: "Order_Shipping" }, function (err, data) {
-      if (err) {
-        console.log(err);
-      } else {
-        //console.log(data);
+    const data = await Order.find({ status: "Order_Pending" })
+      .populate("userId", "name")
+      .exec();
 
-        Admin.findById(adminId).exec((err, admin) => {
-          if (err || !admin) {
-            return res.status(400).json({
-              error: "admin not found",
-            });
-          }
-
-          //console.log(data);
-
-          res.render("admin_shipped_order_list", { admin, data });
-        });
-      }
-    });
-
-    //getpage(req,res,"admin_shipped_order_list",cookie);
-  } else {
-    res.redirect("/admin/admin_login");
+    res.render("admin_pending_order_list", { admin, data });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
-exports.admin_completed_order_list_page = (req, res) => {
-  const cookie = req.cookies.admin_cookie;
-  if (cookie) {
-    const decoded = jwt.verify(cookie, process.env.JWT_SECRET);
-    const adminId = decoded._id;
+exports.admin_processing_order_list_page = async (req, res) => {
+  try {
+    const cookie = req.cookies.admin_cookie;
 
-    const order_id = req.query.order_id;
-
-    if (order_id) {
-      Order.findOneAndUpdate(
-        { _id: order_id },
-        {
-          $set: {
-            status: "Order_Delivered",
-          },
-        },
-        (err, doc) => {
-          if (!err) {
-            // console.log("done!!!!");
-          } else {
-            console.log("Error during record update : " + err);
-          }
-        }
-      );
+    if (!cookie) {
+      return res.redirect("/admin/admin_login");
     }
 
-    Order.find({ status: "Order_Delivered" }, function (err, data) {
-      if (err) {
-        console.log(err);
-      } else {
-        //console.log(data);
-
-        Admin.findById(adminId).exec((err, admin) => {
-          if (err || !admin) {
-            return res.status(400).json({
-              error: "admin not found",
-            });
-          }
-
-          //console.log(data);
-
-          res.render("admin_completed_order_list", { admin, data });
-        });
-      }
-    });
-    //getpage(req,res,"admin_completed_order_list",cookie);
-  } else {
-    res.redirect("/admin/admin_login");
-  }
-};
-
-exports.admin_reject_order_list_page = (req, res) => {
-  const cookie = req.cookies.admin_cookie;
-  if (cookie) {
     const decoded = jwt.verify(cookie, process.env.JWT_SECRET);
     const adminId = decoded._id;
 
     const order_id = req.query.order_id;
 
+    // Update the order status if order_id is provided
     if (order_id) {
-      Order.findOneAndUpdate(
-        { _id: order_id },
-        {
-          $set: {
-            status: "Order_Rejected",
-          },
-        },
-        (err, doc) => {
-          if (!err) {
-            // console.log("done!!!!");
-          } else {
-            console.log("Error during record update : " + err);
-          }
-        }
-      );
+      await Order.findByIdAndUpdate(order_id, {
+        status: "Order_Packing",
+      }).exec();
     }
 
-    Order.find({ status: "Order_Rejected" }, function (err, data) {
-      if (err) {
-        console.log(err);
-      } else {
-        //console.log(data);
+    // Fetch all orders with status "Order_Packing"
+    const data = await Order.find({ status: "Order_Packing" })
+      .populate("userId", "name")
+      .exec();
 
-        Admin.findById(adminId).exec((err, admin) => {
-          if (err || !admin) {
-            return res.status(400).json({
-              error: "admin not found",
-            });
-          }
+    // Find the admin details
+    const admin = await Admin.findById(adminId).exec();
+    if (!admin) {
+      return res.status(400).json({ error: "admin not found" });
+    }
 
-          //console.log(data);
-
-          res.render("admin_reject_order_list", { admin, data });
-        });
-      }
-    });
-    //getpage(req,res,"admin_reject_order_list",cookie);
-  } else {
-    res.redirect("/admin/admin_login");
+    res.render("admin_processing_order_list", { admin, data });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
-exports.admin_order_details_page = (req, res) => {
-  const cookie = req.cookies.admin_cookie;
+exports.admin_shipped_order_list_page = async (req, res) => {
+  try {
+    const cookie = req.cookies.admin_cookie;
 
-  if (cookie) {
+    if (!cookie) {
+      return res.redirect("/admin/admin_login");
+    }
+
     const decoded = jwt.verify(cookie, process.env.JWT_SECRET);
     const adminId = decoded._id;
 
     const order_id = req.query.order_id;
-    //console.log(order_id);
 
-    //const orderinfo = await Order.find({});
+    // Update the order status if order_id is provided
+    if (order_id) {
+      await Order.findByIdAndUpdate(order_id, {
+        status: "Order_Shipping",
+      }).exec();
+    }
 
-    Order.find({ _id: order_id }, function (err, data) {
-      if (err) {
-        console.log(err);
-      } else {
-        //console.log(data);
+    // Fetch all orders with status "Order_Shipping"
+    const data = await Order.find({ status: "Order_Shipping" })
+      .populate("userId", "name")
+      .exec();
 
-        Admin.findById(adminId).exec((err, admin) => {
-          if (err || !admin) {
-            return res.status(400).json({
-              error: "admin not found",
-            });
-          }
+    // Find the admin details
+    const admin = await Admin.findById(adminId).exec();
+    if (!admin) {
+      return res.status(400).json({ error: "admin not found" });
+    }
 
-          //console.log(data);
+    res.render("admin_shipped_order_list", { admin, data });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
-          res.render("admin_order_details", { admin, data });
-        });
+exports.admin_completed_order_list_page = async (req, res) => {
+  try {
+    const cookie = req.cookies.admin_cookie;
+
+    if (!cookie) {
+      return res.redirect("/admin/admin_login");
+    }
+
+    const decoded = jwt.verify(cookie, process.env.JWT_SECRET);
+    const adminId = decoded._id;
+
+    const order_id = req.query.order_id;
+
+    // Update the order status if order_id is provided
+    if (order_id) {
+      try {
+        await Order.findByIdAndUpdate(order_id, {
+          status: "Order_Delivered",
+        }).exec();
+      } catch (err) {
+        console.log("Error during record update : " + err);
       }
-    });
-  } else {
-    res.redirect("/admin/admin_login");
+    }
+
+    // Fetch all orders with status "Order_Delivered"
+    const data = await Order.find({ status: "Order_Delivered" })
+      .populate("userId", "name")
+      .exec();
+
+    // Find the admin details
+    const admin = await Admin.findById(adminId).exec();
+    if (!admin) {
+      return res.status(400).json({ error: "admin not found" });
+    }
+
+    res.render("admin_completed_order_list", { admin, data });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.admin_reject_order_list_page = async (req, res) => {
+  try {
+    const cookie = req.cookies.admin_cookie;
+
+    if (!cookie) {
+      return res.redirect("/admin/admin_login");
+    }
+
+    const decoded = jwt.verify(cookie, process.env.JWT_SECRET);
+    const adminId = decoded._id;
+
+    const order_id = req.query.order_id;
+
+    // Update the order status to "Order_Rejected" if order_id is provided
+    if (order_id) {
+      try {
+        await Order.findByIdAndUpdate(order_id, {
+          status: "Order_Rejected",
+        }).exec();
+      } catch (err) {
+        console.log("Error during record update: " + err);
+      }
+    }
+
+    // Fetch all orders with status "Order_Rejected"
+    const data = await Order.find({ status: "Order_Rejected" })
+      .populate("userId", "name")
+      .exec();
+
+    // Find the admin details
+    const admin = await Admin.findById(adminId).exec();
+    if (!admin) {
+      return res.status(400).json({ error: "admin not found" });
+    }
+
+    res.render("admin_reject_order_list", { admin, data });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.admin_order_details_page = async (req, res) => {
+  try {
+    const cookie = req.cookies.admin_cookie;
+
+    if (!cookie) {
+      return res.redirect("/admin/admin_login");
+    }
+
+    const decoded = jwt.verify(cookie, process.env.JWT_SECRET);
+    const adminId = decoded._id;
+
+    const order_id = req.query.order_id;
+
+    // Find the admin
+    const admin = await Admin.findById(adminId).exec();
+    if (!admin) {
+      return res.status(400).json({ error: "admin not found" });
+    }
+
+    // Find the order and populate user information
+    const data = await Order.findById(order_id).populate("userId").exec();
+    if (!data) {
+      return res.status(400).json({ error: "order not found" });
+    }
+
+    res.render("admin_order_details", { admin, data });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
   }
 };

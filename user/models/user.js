@@ -25,14 +25,19 @@ const userschema = new mongoose.Schema({
     default: Date.now,
   },
   updated: Date,
-  photo: {
-    type: String,
+  fileName: String,
+  image: {
+    data: Buffer,
+    contentType: String,
   },
   address: {
     type: String,
   },
   city: {
     type: String,
+  },
+  zipCode: {
+    type: Number,
   },
   state: {
     type: String,
@@ -48,10 +53,10 @@ const userschema = new mongoose.Schema({
 
 userschema.pre("save", function (next) {
   if (this.isModified("password")) {
-    console.log(`the current password is  : ${this.password}`);
+    // console.log(`the current password is  : ${this.password}`);
     const salt = bcrypt.genSaltSync(12);
     this.password = bcrypt.hashSync(this.password, salt);
-    console.log(`the current password is  : ${this.password}`);
+    // console.log(`the current password is  : ${this.password}`);
   }
   next();
 });

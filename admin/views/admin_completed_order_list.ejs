@@ -36,7 +36,7 @@
           <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">
+                <a href="/admin/">
                   <i class="bi bi-globe2 small me-2"></i> Dashboard
                 </a>
               </li>
@@ -66,10 +66,10 @@
                 <td>
                   <a href=""><%= i %></a>
                 </td>
-                <td><%= data.name %></td>
-                <td><%= moment(data.ordertime).format('HH:MM:SS') %></td>
-                <td><%= moment(data.ordertime).format('Do MMMM, YYYY') %></td>
-                <td>RS <%= data.totalprice %></td>
+                <td><%= data.userId.name %></td>
+                <td><%= moment(data.orderTime).format('HH:MM:SS') %></td>
+                <td><%= moment(data.orderTime).format('Do MMMM, YYYY') %></td>
+                <td>RS <%= data.totalPrice %></td>
 
                 <% if(data.status == 'Order_Delivered') { %>
                 <td>

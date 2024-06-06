@@ -4,87 +4,99 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 exports.order = async (req, res) => {
-  // console.log(req.body.totalprice);
+  try {
+    // Check if user is authenticated
+    const token = req.cookies.jwt;
+    if (!token) {
+      return res.redirect("/login");
+    }
 
-  //   const x = req.session.cart.items;
+    // Extract user ID from token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded._id;
 
-  //     for (var key in x){
-  //         console.log( key + ": " + x[key].items);
-  //     }
+    const { address, city, states, zipCode } = req.body;
 
-  const order = await new Order({
-    name: req.body.fullname,
-    address: req.body.address,
-    city: req.body.cityname,
-    state: req.body.states,
-    coutry: req.body.country,
-    zipcode: req.body.zipcode,
-    email: req.body.email,
-    phonenumber: req.body.phonenumber,
-    items: req.session.cart.items,
-    totalprice: req.body.totalprice,
-    qty: req.session.cart.totalqty,
-  });
+    // Create new order instance
+    const order = await new Order({
+      userId: userId,
+      items: req.session.cart.items,
+      totalPrice: req.body.totalPrice,
+      addressDetails: {
+        address: address,
+        city: city,
+        zipCode: zipCode,
+        state: states,
+      },
+    });
 
-  await order
-    .save()
-    .then((result) => {
+    await order.save().then((result) => {
       req.flash("success", "Order Request Sent Successfully.");
 
       delete req.session.cart;
 
       res.redirect("/order_history");
-    })
-    .catch((err) => {
-      console.log(err);
-      req.flash("error", "Order Does not Placed Successfully");
-      res.redirect("/checkout");
     });
-};
-
-exports.order_details_page = async (req, res) => {
-  const token = req.cookies.jwt;
-
-  if (token) {
-    const order_id = req.query.order_id;
-
-    const data = await Order.find({ _id: order_id });
-    //console.log(data);
-    res.render("order_details", { cookie: "generated", data });
-  } else {
-    res.redirect("/login");
+  } catch (error) {
+    console.error("Error in Order:", error);
+    // Flash error message and redirect to checkout page
+    req.flash("error", "Order Does not Placed Successfully");
+    res.redirect("/checkout");
   }
 };
 
-exports.order_history_page = (req, res) => {
-  const token = req.cookies.jwt;
+exports.order_details_page = async (req, res) => {
+  try {
+    const token = req.cookies.jwt;
 
-  if (token) {
-    const success = req.flash("success");
+    if (!token) {
+      return res.redirect("/login");
+    }
+
+    const order_id = req.query.order_id;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded._id;
+
+    // Find the order and populate the user data
+    const orderData = await Order.findOne({ _id: order_id, userId })
+      .populate("userId")
+      .exec();
+
+    if (!orderData) {
+      req.flash("error", "Order not found");
+      return res.redirect("/order_history");
+    }
+
+    console.log("orderData :-", orderData);
+    // Render the order details page with the combined order and user data
+    res.render("order_details", { cookie: "generated", orderData });
+  } catch (error) {
+    console.error("Error in order_details_page:", error);
+    req.flash("error", "An error occurred while fetching the order details");
+    res.redirect("/order_history");
+  }
+};
+
+exports.order_history_page = async (req, res) => {
+  try {
+    const token = req.cookies.jwt;
+
+    if (!token) {
+      return res.redirect("/login");
+    }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded._id;
 
-    User.findById(userId).exec((err, user) => {
-      if (err || !user) {
-        return res.status(400).json({
-          error: "user not found",
-        });
-      }
-      //console.log(user);
+    const orders = await Order.find({ userId: userId }).sort({ orderTime: -1 });
 
-      const x = user.email;
-
-      Order.find({ email: x }, function (err, orderlist) {
-        // console.log(orderlist);
-        res.render("order_history", {
-          cookie: "generated",
-          orderlist,
-          success,
-        });
-      });
+    res.render("order_history", {
+      cookie: "generated",
+      orderList: orders,
     });
-  } else {
+  } catch (error) {
+    console.error("Error in order_history_page:", error);
+    req.flash("error", "An error occurred while fetching order history.");
     res.redirect("/login");
   }
 };

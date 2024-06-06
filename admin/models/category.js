@@ -16,8 +16,10 @@ const categoryschema = new mongoose.Schema({
     default: Date.now,
   },
   updated: Date,
+  category_fileName: String,
   category_photo: {
-    type: String,
+    data: Buffer,
+    contentType: String,
   },
 });
 

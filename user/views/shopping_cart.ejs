@@ -75,7 +75,7 @@
                         <a href="" class="cart-table__product-item">
                           <div class="cart-table__product-item-img mt-3">
                             <img
-                              src="../../admin/admin_src/assets/images/product/<%= products.items.product_photo %>"
+                              src="data:<%= products.items.product_photo.contentType %>;base64,<%= Buffer.from(products.items.product_photo.data).toString('base64') %>"
                               alt="product"
                             />
                           </div>
@@ -89,8 +89,30 @@
                         RS <%= products.items.MRP %>
                       </td>
 
-                      <td class="cart-table-item order-date align-middle">
+                      <td class="cart-table-item order-total align-middle">
                         <%= products.qty %>
+                        <!-- <div class="counter-btn-wrapper">
+                          <button
+                            class="counter-btn-dec counter-btn"
+                            onclick="decrement()"
+                          >
+                            -
+                          </button>
+                          <input
+                            type="number"
+                            id="counter-btn-counter"
+                            class="counter-btn-counter"
+                            min="1"
+                            max="1000"
+                            placeholder="1"
+                          />
+                          <button
+                            class="counter-btn-inc counter-btn"
+                            onclick="increment()"
+                          >
+                            +
+                          </button>
+                        </div> -->
                       </td>
 
                       <td class="cart-table-item order-subtotal align-middle">

@@ -7,7 +7,7 @@
     <%- include('common/header'); %>
     <!-- Header  Section start -->
 
-    <!-- breedcrumb section start  -->
+    <!-- breedCrumb section start  -->
     <div class="section breedcrumb">
       <div class="breedcrumb__img-wrapper">
         <img src="src/images/banner/breedcrumb.jpg" alt="breedcrumb" />
@@ -46,9 +46,9 @@
         </div>
       </div>
     </div>
-    <!-- breedcrumb section end   -->
+    <!-- breedCrumb section end   -->
 
-    <!-- dashboard Secton Start  -->
+    <!-- dashboard Section Start  -->
     <div class="dashboard section">
       <div class="container">
         <div class="row dashboard__content">
@@ -61,24 +61,10 @@
                   <h2 class="font-body--xxl-500">Order History</h2>
                 </div>
 
-                <% if(success) { %>
-
-                <div
-                  class="alert alert-success"
-                  role="alert"
-                  id="success-alert"
-                >
-                  <span style="color: #e35651; font-weight: bold"
-                    >Order Request Sent Successfully.</span
-                  >
-                </div>
-
-                <% } %>
-
                 <div class="dashboard__order-history-table">
                   <div class="table-responsive">
                     <table class="table">
-                      <thead>
+                      <thead style="text-align: center">
                         <tr>
                           <th
                             scope="col"
@@ -122,77 +108,73 @@
                           ></th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <% let i=1 %> <% orderlist.forEach(function (orderlist)
-                        { %>
+                      <tbody style="text-align: center">
+                        <% let i=1 %> <% orderList.forEach(function (orders) {
+                        %>
 
-                        <tr>
+                        <tr
+                          style="
+                            border-color: inherit;
+                            border-style: hidden;
+                            border-width: 1px;
+                          "
+                        >
                           <td><%= i %></td>
                           <td
                             class="dashboard__order-history-table-item order-id"
                           >
-                            <%= orderlist._id %>
+                            <%= orders._id %>
                           </td>
 
                           <td
                             class="dashboard__order-history-table-item order-date"
                           >
-                            <%= moment(orderlist.ordertime).format('Do MMMM,
-                            YYYY') %>
-                          </td>
-
-                          <td
-                            class="dashboard__order-history-table-item order-date"
-                          >
-                            <%= moment(orderlist.ordertime).format('HH:mm:ss')
+                            <%= moment(orders.orderTime).format('DD MMMM, YYYY')
                             %>
+                          </td>
+
+                          <td
+                            class="dashboard__order-history-table-item order-date"
+                          >
+                            <%= moment(orders.orderTime).format('HH:mm:ss') %>
                           </td>
 
                           <td
                             class="dashboard__order-history-table-item order-total"
                           >
-                            <p class="order-total-price">
-                              RS. <%= orderlist.totalprice %>
-                              <span class="quantity">
-                                (<%= orderlist.qty %> Products)</span
-                              >
-                            </p>
+                            Rs. <%= orders.totalPrice %>
                           </td>
 
                           <td
                             class="dashboard__order-history-table-item order-status"
                           >
-                            <% if(orderlist.status == 'Order_Pending'){ %>
+                            <% if(orders.status == 'Order_Pending'){ %>
 
-                            <span style="color: #bc1d1d; font-weight: bold"
+                            <span style="color: #bc1d1d; font-weight: 500"
                               >Order Pending</span
                             >
 
-                            <% } else if(orderlist.status == 'Order_Packing'){
-                            %>
+                            <% } else if(orders.status == 'Order_Packing'){ %>
 
-                            <span style="color: #0999a3; font-weight: bold"
+                            <span style="color: #0999a3; font-weight: 500"
                               >Order Packing</span
                             >
 
-                            <% }else if(orderlist.status == 'Order_Shipping'){
-                            %>
+                            <% }else if(orders.status == 'Order_Shipping'){ %>
 
-                            <span style="color: #67cb0f; font-weight: bold"
+                            <span style="color: #67cb0f; font-weight: 500"
                               >Order Shipped</span
                             >
 
-                            <% }else if(orderlist.status == 'Order_Delivered'){
-                            %>
+                            <% }else if(orders.status == 'Order_Delivered'){ %>
 
-                            <span style="color: #6e2991; font-weight: bold"
+                            <span style="color: #6e2991; font-weight: 500"
                               >Order Delivered</span
                             >
 
-                            <% }else if(orderlist.status == 'Order_Rejected'){
-                            %>
+                            <% }else if(orders.status == 'Order_Rejected'){ %>
 
-                            <span style="color: #af5061; font-weight: bold"
+                            <span style="color: #af5061; font-weight: 500"
                               >Order Rejected</span
                             >
 
@@ -203,9 +185,10 @@
                             class="dashboard__order-history-table-item order-details"
                           >
                             <a
-                              href="/order_details?order_id=<%= orderlist._id %>"
+                              href="/order_details?order_id=<%= orders._id %>"
+                              style="text-align: center"
                             >
-                              View Details</a
+                              Order Details</a
                             >
                           </td>
                         </tr>

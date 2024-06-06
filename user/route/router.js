@@ -1,27 +1,26 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const router = express.Router();
-router.use(bodyParser.json());
-
+const { check } = require("express-validator");
+const multer = require("multer");
 const jwt = require("jsonwebtoken");
+const { guest } = require("../middleware/guest");
 require("dotenv").config();
 
 const user = require("../models/user");
-
-const { homepage } = require("../controller/homecontroller");
+const { homePage } = require("../controller/homeController");
 const {
-  loginpage,
-  registerpage,
-  signin,
+  login,
+  register,
+  signIn,
   signup,
   forgot_password_page,
   forgot_password,
 } = require("../controller/authentication");
 const {
-  userdashboard,
+  userDashboard,
   account_setting,
   logout,
-  updateuserinfo,
+  updateUserinfo,
   change_pw,
 } = require("../controller/user");
 const { category } = require("../controller/category");
@@ -30,20 +29,17 @@ const {
   order_history_page,
   order,
 } = require("../controller/order");
-const { shopping_cart_page, updatecart } = require("../controller/cart");
+const { shopping_cart_page, updateCart } = require("../controller/cart");
 const { product } = require("../controller/product");
 const { checkout } = require("../controller/checkout");
 const { contact } = require("../controller/contact");
 const { blog1, blog2, blog3 } = require("../controller/blog");
 
-const { guest } = require("../middleware/guest");
-const { check } = require("express-validator");
+const profileController = require("../controller/profileController"); // Ensure the correct path
 
-const multer = require("multer");
+router.get("/", homePage);
 
-router.get("/", homepage);
-router.get("/login", guest, loginpage);
-
+router.get("/login", guest, login);
 router.get("/forgot_password", forgot_password_page);
 router.post(
   "/forgot_password",
@@ -62,8 +58,7 @@ router.post(
   ],
   forgot_password
 );
-
-router.get("/register", guest, registerpage);
+router.get("/register", guest, register);
 router.post(
   "/register",
   [
@@ -82,77 +77,35 @@ router.post(
   ],
   signup
 );
-
 router.post(
   "/login",
   [
     check("email", "email is required").isEmail(),
     check("password", "password is required").notEmpty(),
   ],
-  signin
+  signIn
 );
 
-router.get("/user_dashboard", userdashboard);
+router.get("/user_dashboard", userDashboard);
 router.get("/logout", logout);
 router.get("/account_setting", account_setting);
-router.post("/account_setting", updateuserinfo);
+router.post("/account_setting", updateUserinfo);
 
-const storage = multer.diskStorage({
-  destination: (req, file, callback) => {
-    callback(null, "./user/public/src/images/profile_images");
-  },
-  filename: (req, file, callback) => {
-    callback(null, file.originalname);
-  },
-});
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
-const upload = multer({
-  storage: storage,
-  fileFilter(req, file, cb) {
-    if (!file.originalname.match(/\.(png|jpg|jpeg)$/)) {
-      // upload only png and jpg format
-      return cb(new Error("Please upload a jpg | png | jpeg Image file "));
-    }
-    cb(undefined, true);
-  },
-});
-
-router.post("/profile_upload", upload.single("originalname"), (req, res) => {
-  const token = req.cookies.jwt;
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  const userId = decoded._id;
-  //console.log("userid cookiee : "+userId);
-
-  if (JSON.stringify(req.file) == undefined) {
-    req.flash("uploaderrormsg", "Please upload the Photo");
-    res.redirect("/account_setting");
-  }
-
-  user.findOneAndUpdate(
-    { _id: userId },
-    {
-      $set: {
-        photo: req.file.originalname,
-
-        updated: new Date(),
-      },
-    },
-    (err, doc) => {
-      if (!err) {
-        res.redirect("/user_dashboard");
-      } else {
-        console.log("Error during record update : " + err);
-      }
-    }
-  );
-});
+router.post(
+  "/profile_upload",
+  upload.single("image"),
+  profileController.uploadProfileImage
+);
 
 router.post("/change_password", change_pw);
 
 //order
 router.get("/order_history", order_history_page);
 router.get("/shopping_cart", shopping_cart_page);
-router.post("/updatecart", updatecart);
+router.post("/updatecart", updateCart);
 router.get("/order_details", order_details_page);
 router.post("/order", order);
 

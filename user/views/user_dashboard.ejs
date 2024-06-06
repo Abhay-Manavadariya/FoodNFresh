@@ -197,7 +197,7 @@
                   <div class="dashboard__user-profile dashboard-card">
                     <div class="dashboard__user-profile-img">
                       <img
-                        src="src/images/profile_images/<%= user.photo%>"
+                        src="data:<%= user.image.contentType %>;base64,<%= user.image.data.toString('base64') %>"
                         alt="userImg"
                       />
                     </div>
@@ -239,7 +239,7 @@
                       </p>
                     </div>
                     <a
-                      href="account-setting.html"
+                      href="/account_setting"
                       class="dashboard__user-billing-editaddress font-body--lg-500"
                     >
                       Edit address</a

@@ -1,8 +1,10 @@
 const express = require("express");
-//const bodyParser = require("body-parser");
 const router = express.Router();
-//router.use(bodyParser.json());
 const multer = require("multer");
+
+//upload the photo
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 const {
   admin_grocery_details,
@@ -47,32 +49,11 @@ router.post("/admin_grocery_details", admin_grocery_details);
 
 router.get("/admin_add_product_category", admin_add_product_category_page);
 
-//upload the photo
-const storage = multer.diskStorage({
-  destination: "./admin/public/admin_src/assets/images/category",
-  filename: (req, file, callback) => {
-    callback(null, file.originalname);
-  },
-});
-
-// const limits = {
-//     fields: 10,
-//     fileSize: 100 * 75,
-//     files: 1,
-//   };
-
-const upload = multer({
-  storage: storage,
-  fileFilter(req, file, cb) {
-    if (!file.originalname.match(/\.(png|jpg|jpeg)$/)) {
-      // upload only png and jpg format
-      return cb(new Error("Please upload a jpg | png | jpeg Image file "));
-    }
-    cb(undefined, true);
-  },
-}).single("file");
-
-router.post("/add_product_category", upload, add_product_category);
+router.post(
+  "/add_product_category",
+  upload.single("image"),
+  add_product_category
+);
 router.get(
   "/admin_all_category/:category_id/:status",
   admin_category_status_change
@@ -81,25 +62,7 @@ router.get("/admin_all_category", admin_all_category_page);
 
 router.get("/admin_add_new_product", admin_add_new_product_page);
 
-const storage1 = multer.diskStorage({
-  destination: "./admin/public/admin_src/assets/images/product",
-  filename: (req, file, callback) => {
-    callback(null, file.originalname);
-  },
-});
-
-const upload1 = multer({
-  storage: storage1,
-  fileFilter(req, file, cb) {
-    if (!file.originalname.match(/\.(png|jpg|jpeg)$/)) {
-      // upload only png and jpg format
-      return cb(new Error("Please upload a jpg | png | jpeg Image file "));
-    }
-    cb(undefined, true);
-  },
-}).single("file");
-
-router.post("/admin_add_product", upload1, admin_add_product);
+router.post("/admin_add_product", upload.single("image"), admin_add_product);
 
 router.get("/admin_all_product", admin_all_product_page);
 router.get(

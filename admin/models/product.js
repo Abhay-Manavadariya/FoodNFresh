@@ -17,8 +17,10 @@ const productschema = new mongoose.Schema({
     type: String,
     default: "active",
   },
+  product_fileName: String,
   product_photo: {
-    type: String,
+    data: Buffer,
+    contentType: String,
   },
   created: {
     type: Date,

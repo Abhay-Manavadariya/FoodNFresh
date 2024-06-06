@@ -60,8 +60,8 @@
                   <div class="cards-md__img-wrapper">
                     <a href="/product?category_name=<%= data.name%>">
                       <img
-                        src="../../admin/admin_src/assets/images/category/<%= data.category_photo %>"
-                        alt="<%= data.category_photo %>"
+                        src="data:<%= data.category_photo.contentType %>;base64,<%= data.category_photo.data.toString('base64') %>"
+                        alt=""
                       />
                     </a>
                   </div>

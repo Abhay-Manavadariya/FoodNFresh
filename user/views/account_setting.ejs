@@ -108,6 +108,16 @@
                           </div>
 
                           <div class="contact-form-input">
+                            <label for="email1">ZipCode</label>
+                            <input
+                              type="text"
+                              name="zipCode"
+                              required
+                              value="<%= user.zipCode %>"
+                            />
+                          </div>
+
+                          <div class="contact-form-input">
                             <label for="email1">State </label>
 
                             <select
@@ -202,8 +212,8 @@
                         >
                           <div class="dashboard__content-img-wrapper">
                             <img
-                              src="src/images/profile_images/<%= user.photo%>"
-                              alt="user-profile-img"
+                              src="data:<%= user.image.contentType %>;base64,<%= user.image.data.toString('base64') %>"
+                              alt="userImg"
                             />
                           </div>
 
@@ -217,7 +227,7 @@
                             type="file"
                             id="file-upload"
                             style="display: none"
-                            name="originalname"
+                            name="image"
                           />
 
                           <button class="button button--outline">Update</button

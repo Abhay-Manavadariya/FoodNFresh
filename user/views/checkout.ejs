@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-  
-<%- include('common/head'); %>
+  <%- include('common/head'); %>
 
   <body>
-    
     <!-- Header Section start -->
     <%- include('common/header'); %>
     <!-- Header  Section start -->
@@ -58,7 +56,6 @@
                 <h2 class="font-body--xxxl-500">Billing Information</h2>
               </div>
               <div class="billing__content-card-body">
-                
                 <form action="/order" method="post">
                   <div class="contact-form__content">
                     <div class="contact-form__content-group">
@@ -68,12 +65,11 @@
                           type="text"
                           id="fname1"
                           placeholder="Your first name"
-                          name="fullname"
+                          name="fullName"
                           value="<%= user.name %>"
-                          required
+                          disabled
                         />
                       </div>
-                      
                     </div>
 
                     <div class="contact-form-input">
@@ -89,58 +85,14 @@
                     </div>
 
                     <div class="contact-form__content-group">
-                      <!-- states -->
-                      <div class="contact-form-input">
-                        <label for="states">City</label>
-                        
-                        <input type="text" name="cityname" placeholder="Enter City Name" required>
-  
-                        </select>
-                      </div>
-                      <!-- zip -->
-                      <div class="contact-form-input">
-                        <label for="zip">Zip Code</label>
-                        <input type="text" name="zipcode" placeholder="Enter Zip Code" required> 
-                      </div>
-  
-                      </div>
-
-                    <div class="contact-form__content-group">
-                      <!-- Country -->
-                      <div class="contact-form-input">
-                        <label for="country">Country / Region </label>
-                        <input type="text" value="<%= user.country %>" name="country" disabled>
-                      </div>
-                      <!-- states -->
-                      <div class="contact-form-input">
-                        <label for="states">state</label>
-
-                        <select id="states" name="states"  class="contact-form-input__dropdown">
-
-                            <option value="<%= user.state %>" selected><%= user.state %></option>
-
-                              <% if(typeof state != 'undefined') { %>
-                                <% state.forEach(function(state) { %>
-                                  <option value="<%= state.name %>"><%= state.name %></option>
-                                <% }) %>
-                            <% } %>
-
-                        </select>
-                      </div>
-                      
-                    </div>
-
-  
-                    <div class="contact-form__content-group">
                       <div class="contact-form-input">
                         <label for="email"> email </label>
                         <input
                           type="text"
                           id="email"
-                          placeholder="Email Address"
                           name="email"
                           value="<%= user.email %>"
-                          required
+                          disabled
                         />
                       </div>
                       <div class="contact-form-input">
@@ -149,14 +101,72 @@
                           type="number"
                           id="phone"
                           placeholder="Phone number"
-                          name="phonenumber"
+                          name="contact"
                           value="<%= user.contact %>"
+                          disabled
+                        />
+                      </div>
+                    </div>
+
+                    <div class="contact-form__content-group">
+                      <!-- Country -->
+                      <div class="contact-form-input">
+                        <label for="country">Country / Region </label>
+                        <input
+                          type="text"
+                          value="<%= user.country %>"
+                          name="country"
+                          disabled
+                        />
+                      </div>
+                      <!-- states -->
+                      <div class="contact-form-input">
+                        <label for="states">state</label>
+
+                        <select
+                          id="states"
+                          name="states"
+                          class="contact-form-input__dropdown"
+                        >
+                          <option value="<%= user.state %>" selected>
+                            <%= user.state %>
+                          </option>
+
+                          <% if(typeof state != 'undefined') { %> <%
+                          state.forEach(function(stateOption) { %>
+                          <option value="<%= stateOption.name %>">
+                            <%= stateOption.name %>
+                          </option>
+                          <% }) %> <% } %>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="contact-form__content-group">
+                      <!-- states -->
+                      <div class="contact-form-input">
+                        <label for="states">City</label>
+
+                        <input
+                          type="text"
+                          name="city"
+                          placeholder="Enter City Name"
+                          value="<%= user.city %>"
                           required
                         />
                       </div>
-
+                      <!-- zip -->
+                      <div class="contact-form-input">
+                        <label for="zipCode">Zip Code</label>
+                        <input
+                          type="text"
+                          name="zipCode"
+                          placeholder="Enter Zip Code"
+                          value="<%= user.zipCode %>"
+                          required
+                        />
+                      </div>
                     </div>
-
 
                     <div class="bill-card__content">
                       <div class="bill-card__header">
@@ -167,42 +177,50 @@
                       <div class="bill-card__body">
                         <!-- Product Info -->
                         <div class="bill-card__product">
+                          <% for(let products of
+                          Object.values(session.cart.items)) { %>
 
-                          <% for(let products of Object.values(session.cart.items)) { %>
-               
-                          <div class="bill-card__product-item" style="margin-bottom: 1%;">
+                          <div
+                            class="bill-card__product-item"
+                            style="margin-bottom: 1%"
+                          >
                             <div class="bill-card__product-item-content">
                               <div class="img-wrapper">
                                 <img
-                                  src="../../admin/admin_src/assets/images/product/<%= products.items.product_photo %>"
+                                  src="data:<%= products.items.product_photo.contentType %>;base64,<%= Buffer.from(products.items.product_photo.data).toString('base64') %>"
                                   alt="product"
                                 />
                               </div>
                               <h5 class="font-body--md-400">
-                                <%= products.items.name %> <span class="quantity"> x <%= products.qty %></span>
-                                <input type="hidden" name="qty" value="<%= products.qty %>">
+                                <%= products.items.name %>
+                                <span class="quantity">
+                                  x <%= products.qty %></span
+                                >
+                                <input
+                                  type="hidden"
+                                  name="qty"
+                                  value="<%= products.qty %>"
+                                />
                               </h5>
-
-                              
                             </div>
-      
-                            <p class="bill-card__product-price font-body--md-500">
+
+                            <p
+                              class="bill-card__product-price font-body--md-500"
+                            >
                               RS <%= products.items.MRP %>
                             </p>
-
-                           
                           </div>
 
                           <% } %>
-
                         </div>
                         <!-- memo  -->
                         <div class="bill-card__memo">
                           <!-- Subtotal  -->
                           <div class="bill-card__memo-item subtotal">
                             <p class="font-body--md-400">Subtotal:</p>
-                            <span class="font-body--md-500">RS <%= session.cart.totalprice%></span>
-                           
+                            <span class="font-body--md-500"
+                              >RS <%= session.cart.totalprice%></span
+                            >
                           </div>
                           <!-- Shipping  -->
                           <div class="bill-card__memo-item shipping">
@@ -212,8 +230,14 @@
                           <!-- total  -->
                           <div class="bill-card__memo-item total">
                             <p class="font-body--lg-400">Total:</p>
-                            <span class="font-body--xl-500">RS <%= session.cart.totalprice%></span>
-                            <input type="hidden" name="totalprice" value="<%= session.cart.totalprice%>">
+                            <span class="font-body--xl-500"
+                              >RS <%= session.cart.totalprice%></span
+                            >
+                            <input
+                              type="hidden"
+                              name="totalPrice"
+                              value="<%= session.cart.totalprice%>"
+                            />
                           </div>
                         </div>
                       </div>
@@ -222,64 +246,58 @@
                     <div class="bill-card__content">
                       <div class="bill-card__header">
                         <div class="bill-card__header">
-                          <h2 class="bill-card__header-title font-body--xxl-500">
+                          <h2
+                            class="bill-card__header-title font-body--xxl-500"
+                          >
                             Payment Method
                           </h2>
                         </div>
                       </div>
 
                       <div class="bill-card__body">
-                        
-                          <!-- Payment Methods  -->
-                          <div class="bill-card__payment-method">
-                            <div class="bill-card__payment-method-item">
-                              <div class="form-check">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="payment"
-                                  id="cash"
-                                  checked
-                                />
-                                <label
-                                  class="form-check-label font-body--400"
-                                  for="cash"
-                                >
-                                  cash on delivery
-                                </label>
-                              </div>
+                        <!-- Payment Methods  -->
+                        <div class="bill-card__payment-method">
+                          <div class="bill-card__payment-method-item">
+                            <div class="form-check">
+                              <input
+                                class="form-check-input"
+                                type="radio"
+                                name="payment"
+                                id="cash"
+                                checked
+                              />
+                              <label
+                                class="form-check-label font-body--400"
+                                for="cash"
+                              >
+                                cash on delivery
+                              </label>
                             </div>
-
                           </div>
-      
+                        </div>
                       </div>
                     </div>
-                   
 
-                    <button class="button button--lg w-50 ml-50" type="submit" style="margin-left: 25%;">
+                    <button
+                      class="button button--lg w-50 ml-50"
+                      type="submit"
+                      style="margin-left: 25%"
+                    >
                       Place Order
                     </button>
-                  
-
                   </div>
                 </form>
-
               </div>
             </div>
-            
           </div>
-         
         </div>
       </div>
     </section>
     <!-- Billing Section  End  -->
 
-    
     <!--Footer Section Start  -->
     <%- include('common/footer'); %>
     <!--Footer Section end  -->
-
-  
 
     <script src="src/lib/js/jquery.min.js"></script>
     <script src="src/lib/js/swiper-bundle.min.js"></script>
@@ -287,5 +305,4 @@
     <script src="src/lib/js/bootstrap.bundle.min.js"></script>
     <script src="src/js/main.js"></script>
   </body>
-
 </html>

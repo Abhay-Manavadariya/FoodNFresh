@@ -4,115 +4,108 @@ const Product = require("../models/product");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-exports.admin_add_new_product_page = (req, res) => {
-  const cookie = req.cookies.admin_cookie;
+exports.admin_add_new_product_page = async (req, res) => {
+  try {
+    const cookie = req.cookies.admin_cookie;
 
-  const uploaderrormsg = req.flash("uploaderrormsg");
+    if (!cookie) {
+      return res.redirect("/admin/admin_login");
+    }
 
-  const success = req.flash("success_msg");
-
-  if (cookie) {
-    // getpage(req,res,"admin_add_new_product",cookie)
     const decoded = jwt.verify(cookie, process.env.JWT_SECRET);
     const adminId = decoded._id;
 
-    Admin.findById(adminId).exec((err, admin) => {
-      if (err || !admin) {
-        return res.status(400).json({
-          error: "admin not found",
-        });
-      } else {
-        Category.find({}, function (err, data) {
-          if (err) {
-            console.log(err);
-          } else {
-            res.render("admin_add_new_product", {
-              admin,
-              data,
-              uploaderrormsg,
-              success,
-            });
-          }
-        });
-      }
+    const admin = await Admin.findById(adminId).exec();
+    if (!admin) {
+      return res.status(400).json({ error: "admin not found" });
+    }
+
+    const categories = await Category.find({}).exec();
+    const uploaderrormsg = req.flash("uploaderrormsg");
+    const success = req.flash("success_msg");
+
+    res.render("admin_add_new_product", {
+      admin,
+      data: categories,
+      uploaderrormsg,
+      success,
     });
-  } else {
-    res.redirect("/admin/admin_login");
+  } catch (err) {
+    console.error("Error during page load:", err);
+    res.status(500).send("Internal Server Error");
   }
 };
 
 exports.admin_add_product = async (req, res) => {
-  var image = req.file.filename;
-
-  if (image == undefined) {
-    req.flash("uploaderrormsg", "Error while uploading the photo");
-    res.redirect("/admin/admin_add_product_category");
-  } else {
+  try {
     const product = new Product({
       name: req.body.product_name,
       category: req.body.category,
       MRP: req.body.product_MRP,
-      product_photo: image,
+      product_fileName: req.file.originalname,
+      product_photo: {
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      },
     });
 
     await product.save();
     req.flash("success_msg", "Successfully add Product.");
 
     res.redirect("/admin/admin_add_new_product");
+  } catch (error) {
+    console.error("Error while adding product:", err);
+    req.flash("uploaderrormsg", "Error while adding the product");
+    res.redirect("/admin/admin_add_product_category");
   }
 };
 
-exports.admin_all_product_page = (req, res) => {
-  const cookie = req.cookies.admin_cookie;
-  if (cookie) {
+exports.admin_all_product_page = async (req, res) => {
+  try {
+    const cookie = req.cookies.admin_cookie;
+
+    if (!cookie) {
+      return res.redirect("/admin/admin_login");
+    }
+
     const decoded = jwt.verify(cookie, process.env.JWT_SECRET);
     const adminId = decoded._id;
 
-    Admin.findById(adminId).exec((err, admin) => {
-      if (err || !admin) {
-        return res.status(400).json({
-          error: "admin not found",
-        });
-      } else {
-        Product.find({}, function (err, data) {
-          if (err) {
-            console.log(err);
-          } else {
-            res.render("admin_all_product", { admin, data });
-          }
-        });
-      }
+    const admin = await Admin.findById(adminId).exec();
+    if (!admin) {
+      return res.status(400).json({ error: "admin not found" });
+    }
+
+    const products = await Product.find({}).exec();
+
+    res.render("admin_all_product", {
+      admin,
+      data: products,
     });
-  } else {
-    res.redirect("/admin/admin_login");
+  } catch (err) {
+    console.error("Error during page load:", err);
+    res.status(500).send("Internal Server Error");
   }
 };
 
-exports.admin_all_product_status_change = (req, res) => {
-  var { product_id, status } = req.params;
+exports.admin_all_product_status_change = async (req, res) => {
+  try {
+    const { product_id, status } = req.params;
 
-  if (status == 1) {
-    status = "inactive";
-  } else {
-    status = "active";
-  }
+    const updatedStatus = status === "1" ? "inactive" : "active";
 
-  Product.findOneAndUpdate(
-    { _id: product_id },
+    const updatedProduct = await Product.findOneAndUpdate(
+      { _id: product_id },
+      { $set: { status: updatedStatus } }
+    );
 
-    {
-      $set: {
-        status: status,
-      },
-    },
-    (err, doc) => {
-      if (!err) {
-        //console.log("done!!");
-        res.redirect("/admin/admin_all_product");
-      } else {
-        console.log("Error during record update : " + err);
-        res.redirect("/admin/admin_all_product");
-      }
+    if (!updatedProduct) {
+      console.log("Product not found or update failed");
     }
-  );
+
+    res.redirect("/admin/admin_all_product");
+  } catch (error) {
+    console.error("Error during record update:", error);
+    res.redirect("/admin/admin_all_product");
+  }
 };

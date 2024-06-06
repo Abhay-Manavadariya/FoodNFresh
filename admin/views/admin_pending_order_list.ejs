@@ -66,10 +66,10 @@
                 <td>
                   <a href=""><%= i %></a>
                 </td>
-                <td><%= data.name %></td>
+                <td><%= data.userId.name %></td>
                 <td><%= moment(data.ordertime).format('HH:MM:SS') %></td>
                 <td><%= moment(data.ordertime).format('Do MMMM, YYYY') %></td>
-                <td>RS <%= data.totalprice %></td>
+                <td>RS <%= data.totalPrice %></td>
 
                 <% if(data.status == 'Order_Pending') { %>
                 <td>
