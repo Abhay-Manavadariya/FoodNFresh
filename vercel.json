@@ -12,11 +12,5 @@
       "dest": "index.js",
       "methods": ["GET", "POST", "PATCH", "DELETE", "OPTIONS"]
     }
-  ],
-  "functions": {
-    "*.js": {
-      "memory": 3009,
-      "maxDuration": 30
-    }
-  }
+  ]
 }
