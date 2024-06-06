@@ -1,7 +1,12 @@
 const express = require("express");
 const path = require("path");
-const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const corsConfig = {
+  origin: "*",
+  credential: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+};
 
 require("dotenv").config();
 
@@ -16,6 +21,9 @@ const port = process.env.PORT || 8000;
 
 // Database connection
 connectDB();
+
+app.options("", cors(corsConfig));
+app.use(cors(corsConfig));
 
 // Middleware setup
 app.use(express.json({ limit: "10mb" }));
