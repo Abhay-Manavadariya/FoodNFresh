@@ -18,8 +18,8 @@ const port = process.env.PORT || 8000;
 connectDB();
 
 // Middleware setup
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ limit: "50mb", extended: true }));
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(cookieParser());
 app.use(sessionMiddleware);
 app.use(flashMiddleware);
