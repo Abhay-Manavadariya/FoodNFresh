@@ -1,10 +1,10 @@
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
-const mongoose = require("mongoose");
 
 require("dotenv").config();
 
+const connectDB = require("./config/database");
 const sessionMiddleware = require("./middleware/session");
 const flashMiddleware = require("./middleware/flash");
 const momentMiddleware = require("./middleware/moment");
@@ -14,10 +14,7 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 // Database connection
-mongoose
-  .connect(process.env.MONGODB_URL)
-  .then(() => console.log("Database connected....."))
-  .catch((err) => console.log(err));
+connectDB();
 
 // Middleware setup
 app.use(express.json({ limit: "50mb" }));
