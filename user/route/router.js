@@ -2,12 +2,10 @@ const express = require("express");
 const router = express.Router();
 const { check } = require("express-validator");
 const multer = require("multer");
-const jwt = require("jsonwebtoken");
 const { guest } = require("../middleware/guest");
 require("dotenv").config();
 
-const user = require("../models/user");
-const { homePage } = require("../controller/homeController");
+const { homePage } = require("../controller/homecontroller");
 const {
   login,
   register,
