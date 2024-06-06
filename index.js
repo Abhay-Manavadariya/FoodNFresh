@@ -9,7 +9,7 @@ const sessionMiddleware = require("./middleware/session");
 const flashMiddleware = require("./middleware/flash");
 const momentMiddleware = require("./middleware/moment");
 const routes = require("./routes/index");
-
+const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 8000;
 
@@ -26,6 +26,9 @@ app.use(cookieParser());
 app.use(sessionMiddleware);
 app.use(flashMiddleware);
 app.use(momentMiddleware);
+
+// Allow all origins
+app.use(cors());
 
 // Global session middleware
 app.use((req, res, next) => {
