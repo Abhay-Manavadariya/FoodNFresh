@@ -28,7 +28,13 @@ app.use(flashMiddleware);
 app.use(momentMiddleware);
 
 // Allow all origins
-app.use(cors());
+const corsConfig = {
+  origin: "",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+};
+app.use(cors(corsConfig));
+app.options("", cors(corsConfig));
 
 // Global session middleware
 app.use((req, res, next) => {
