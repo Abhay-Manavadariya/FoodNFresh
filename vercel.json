@@ -14,10 +14,6 @@
     }
   ],
   "functions": {
-    "index.js": {
-      "memory": 3009,
-      "maxDuration": 30
-    },
     "*.js": {
       "memory": 3009,
       "maxDuration": 30
