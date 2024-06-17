@@ -14,6 +14,8 @@ Admin can see all the order details as well as manage the entire web application
 
 # [Admin Panel Live site](https://food-n-fresh.vercel.app/admin/admin_login)
 
+![Web Application Preview](./admin_app.jpg)
+
 # Scripts
 
 In the project, you can run:
